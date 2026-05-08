@@ -139,12 +139,13 @@ input, select, textarea {
 }
 
 /* HEADER LOGO UTAMA */
-.logo {
-  height: 28px;
-  max-height: 28px;
-  max-width: 120px;
-  width: auto;
-  object-fit: contain;
+.logo-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   transition: all 0.2s ease;
 }
 
@@ -162,10 +163,12 @@ input, select, textarea {
 }
 
 .logo-box {
-  background: rgba(255,255,255,0.05);
-  padding: 6px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  width: 40px;
+  height: 40px;
 }
   
 .app-header {
