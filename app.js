@@ -58,9 +58,9 @@ function renderList(){
   // SEARCH
   if(searchQuery){
     data = data.filter(j =>
-      j.no.toLowerCase().includes(searchQuery) ||
-      j.nama.toLowerCase().includes(searchQuery)
-    );
+  (j.no || "").toLowerCase().includes(searchQuery) ||
+  (j.nama || "").toLowerCase().includes(searchQuery)
+);
   }
 
   jobList.innerHTML = "";
@@ -70,21 +70,23 @@ function renderList(){
     return;
   }
 
-  data.forEach((j,i)=>{
-    jobList.innerHTML += `
-      <li>
-        <b>${j.no}</b> - ${j.nama}
+ data.forEach((j)=>{
+  const i = pekerjaanAktif.findIndex(p => p.id === j.id);
 
-        <span class="status ${j.status}">
-          ● ${j.status}
-        </span>
+  jobList.innerHTML += `
+    <li>
+      <b>${j.no}</b> - ${j.nama}
 
-        <small>${j.lokasi} | ${j.jam_mulai}</small><br>
-        <button onclick="openModal(${pekerjaanAktif.indexOf(j)})">✅ Laporan Selesai</button>
-      </li>
-    `;
-  });
+      <span class="status ${j.status}">
+        ● ${j.status}
+      </span>
 
+      <small>${j.lokasi} | ${j.jam_mulai}</small><br>
+      <button onclick="openModal(${i})">✅ Laporan Selesai</button>
+    </li>
+  `;
+});
+  
   renderPermitDoc();
 }
 
@@ -112,7 +114,7 @@ izinForm.onsubmit = e => {
   });
 
   pekerjaanAktif.push({
-    id: Date.now()
+    id: Date.now(),
     no: fd.get("no_permit"),
     nama: fd.get("nama_pekerjaan"),
     lokasi: fd.get("lokasi"),
@@ -133,7 +135,9 @@ izinForm.onsubmit = e => {
 
 /* ===== MODAL ===== */
 function openModal(i){
-  jobIndex.value = i;
+  if(pekerjaanAktif[i] === undefined) return;
+
+  jobIndex.value = Number(i);
   jobInfo.innerText = pekerjaanAktif[i].no + " - " + pekerjaanAktif[i].nama;
   modal.style.display = "block";
 }
@@ -144,7 +148,11 @@ modal.onclick = e => { if(e.target === modal) closeModal(); };
 /* ===== SUBMIT SELESAI ===== */
 modalForm.onsubmit = e => {
   e.preventDefault();
-  const i = jobIndex.value;
+  const i = Number(jobIndex.value);
+if (!pekerjaanAktif[i]) {
+  alert("Data tidak ditemukan");
+  return;
+}
   if(!confirm("Yakin laporan pekerjaan sudah selesai?")) return;
 
   const fd = new FormData(modalForm);
