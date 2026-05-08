@@ -205,7 +205,7 @@ input, select, textarea {
 /* TITLE */
 .title {
   text-align: center;
-  font-size: 13px;
+  font-size: 18px;
   line-height: 1.4;
   color: var(--text);
 }
