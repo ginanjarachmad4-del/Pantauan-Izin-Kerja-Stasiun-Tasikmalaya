@@ -264,3 +264,8 @@ input, select, textarea {
   color: var(--text);
   cursor: pointer;
 }
+
+mark {
+  background: yellow;
+  color: black;
+}
