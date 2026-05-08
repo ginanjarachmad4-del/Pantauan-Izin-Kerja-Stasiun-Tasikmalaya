@@ -140,7 +140,8 @@ input, select, textarea {
 
 /* HEADER LOGO UTAMA */
 .logo {
-  height: 34px;
+  height: 28px;
+  max-width: 120px;
   object-fit: contain;
   transition: all 0.2s ease;
 }
