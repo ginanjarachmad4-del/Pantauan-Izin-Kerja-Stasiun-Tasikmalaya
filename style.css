@@ -234,3 +234,33 @@ input, select, textarea {
   color: #fff;
   background: green;
 }
+
+/* SEARCH INPUT BAR */
+.toolbar {
+  margin-bottom: 12px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.3);
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.filter-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btns button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
