@@ -169,3 +169,31 @@ input, select, textarea {
   backdrop-filter: blur(10px);
   background: rgba(10,15,28,0.7);
 }
+
+/* HEADER FIX */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  background: rgba(10,15,28,0.7);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+/* LOGO ROW */
+.logo-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+/* OPTIONAL: TITLE HEADER BIAR RAPI */
+.app-header .title {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text);
+}
