@@ -147,8 +147,8 @@ input, select, textarea {
 
 /* HEADER LOGO BOX */
 .logo-box {
-  width: 200px;
-  height: 200px;
+  width: 800px;
+  height: 800px;
   display: flex;
   align-items: center;
   justify-content: center;
