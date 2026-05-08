@@ -57,17 +57,29 @@ izinForm.onsubmit = e => {
   e.preventDefault();
   const fd = new FormData(izinForm);
 
-  pekerjaanAktif.push({
-    no: fd.get("no_permit"),
-    nama: fd.get("nama_pekerjaan"),
-    lokasi: fd.get("lokasi"),
-    jam_mulai: fd.get("realisasi_jam_mulai")
-  });
-
-  saveStorage();
-  renderList();
-  izinForm.reset();
+  const dataBaru = {
+  no_permit: fd.get("no_permit"),
+  nama_pekerjaan: fd.get("nama_pekerjaan"),
+  unit_kontraktor: fd.get("unit_kontraktor"),
+  rencana_jam_mulai: fd.get("rencana_jam_mulai"),
+  realisasi_jam_mulai: fd.get("realisasi_jam_mulai"),
+  rencana_jam_selesai: fd.get("rencana_jam_selesai"),
+  lokasi: fd.get("lokasi"),
+  jenis_pekerjaan: fd.get("jenis_pekerjaan"),
+  deskripsi: fd.get("deskripsi"),
+  pic: fd.get("pic"),
+  whatsapp: fd.get("whatsapp"),
+  status: "PROSES",
+  waktu_input: new Date().toISOString()
 };
+
+pekerjaanAktif.push(dataBaru);
+saveStorage();
+renderList();
+izinForm.reset();
+
+// kirim ke Google Sheet
+sendToSheet(dataBaru);
 
 /* MODAL */
 function openModal(i) {
@@ -107,3 +119,20 @@ fileInput.onchange = e => {
   };
   r.readAsDataURL(file);
 };
+
+/* KIRIM KE SPREADSHEET */
+const API_URL = "https://script.google.com/macros/s/AKfycbygXu2SKRinm3KYw0rFU3kqYCRX7eu4mdp94xnkKoq1aKX7U9yW_VMHWi8Xv-8gxczZDw/exec";
+
+async function sendToSheet(data) {
+  try {
+    await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+  } catch (err) {
+    console.log("Gagal kirim:", err);
+  }
+}
