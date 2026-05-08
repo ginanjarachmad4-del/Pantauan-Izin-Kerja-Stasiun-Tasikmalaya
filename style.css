@@ -18,6 +18,13 @@ textarea:focus {
   box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
 }
 
+.title {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
 /* RESET */
 * {
   margin: 0;
