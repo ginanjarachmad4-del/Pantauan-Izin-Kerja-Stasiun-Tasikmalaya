@@ -145,17 +145,6 @@ input, select, textarea {
   border: 1px solid var(--border);
 }
 
-/* HEADER LOGO BOX */
-.logo-box {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
 /* IMAGE LOGO */
 .logo {
   height: 34px;
@@ -171,23 +160,50 @@ input, select, textarea {
 }
   
 .app-header {
-  position: relative;
-  background: transparent;
+  text-align: center;
   padding: 12px 0;
   margin-bottom: 12px;
+  background: transparent;
 }
 
-/* LOGO ROW */
+/* LOGO GRID */
 .logo-bar {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-/* OPTIONAL: TITLE HEADER BIAR RAPI */
-.app-header .title {
+.logo-left {
+  justify-self: start;
+}
+
+.logo-center {
+  justify-self: center;
+}
+
+.logo-right {
+  justify-self: end;
+}
+
+/* LOGO BOX FIX */
+.logo-box {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* IMAGE */
+.logo-box img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* TITLE */
+.title {
   text-align: center;
   font-size: 13px;
   line-height: 1.4;
