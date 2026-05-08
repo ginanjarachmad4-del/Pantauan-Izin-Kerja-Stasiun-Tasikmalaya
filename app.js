@@ -41,15 +41,19 @@ function renderList(){
   }
 
   jobList.innerHTML="";
-  pekerjaanAktif.forEach((j,i)=>{
-    jobList.innerHTML+=`
-      <li>
-        <b>${j.no}</b> - ${j.nama} 
-        <span style="color:green;font-weight:bold">● AKTIF</span><br>
-        <small>${j.lokasi} | ${j.jam_mulai}</small><br>
-        <button onclick="openModal(${i})">✅ Laporan Selesai</button>
-      </li>`;
-  });
+pekerjaanAktif.forEach((j,i)=>{
+  jobList.innerHTML+=`
+    <li>
+      <b>${j.no}</b> - ${j.nama}
+
+      <span class="status ${j.status}">
+        ● ${j.status}
+      </span>
+
+      <small>${j.lokasi} | ${j.jam_mulai}</small><br>
+      <button onclick="openModal(${i})">✅ Laporan Selesai</button>
+    </li>`;
+});
 
   renderPermitDoc();
 }
@@ -59,10 +63,15 @@ renderList();
 /* ===== SUBMIT MULAI ===== */
 izinForm.onsubmit = e => {
   e.preventDefault();
+  const btn = izinForm.querySelector("button[type='submit']");
+  btn.disabled = true;
+  btn.innerText = "Mengirim...";
   const fd = new FormData(izinForm);
 
   if(pekerjaanAktif.some(p => p.no === fd.get("no_permit"))){
     alert("❌ No Permit sudah ada");
+    btn.disabled = false;
+    btn.innerText = "Kirim Laporan Mulai";
     return;
   }
 
@@ -73,15 +82,21 @@ izinForm.onsubmit = e => {
   });
 
   pekerjaanAktif.push({
+    id: Date.now()
     no: fd.get("no_permit"),
     nama: fd.get("nama_pekerjaan"),
     lokasi: fd.get("lokasi"),
-    jam_mulai: fd.get("realisasi_jam_mulai")
+    jam_mulai: fd.get("realisasi_jam_mulai"),
+    status: "PROSES"
   });
 
   saveStorage();
   renderList();
   izinForm.reset();
+
+  btn.disabled = false;
+  btn.innerText = "Kirim Laporan Mulai";
+
   showMenu("dokumen");
   alert("✅ Laporan Mulai tersimpan");
 };
@@ -111,7 +126,7 @@ modalForm.onsubmit = e => {
     body: fd
   });
 
-  pekerjaanAktif.splice(i,1);
+  pekerjaanAktif[i].status = "SELESAI";
   saveStorage();
   renderList();
   modalForm.reset();
