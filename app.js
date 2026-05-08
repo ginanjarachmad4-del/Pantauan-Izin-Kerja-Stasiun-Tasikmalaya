@@ -80,7 +80,7 @@ function renderList(){
         </span>
 
         <small>${j.lokasi} | ${j.jam_mulai}</small><br>
-        <button onclick="openModal(${i})">✅ Laporan Selesai</button>
+        <button onclick="openModal(${pekerjaanAktif.indexOf(j)})">✅ Laporan Selesai</button>
       </li>
     `;
   });
@@ -132,10 +132,10 @@ izinForm.onsubmit = e => {
 };
 
 /* ===== MODAL ===== */
-function openModal(pekerjaanAktif.indexOf(j))
+function openModal(i){
   jobIndex.value = i;
-  jobInfo.innerText = pekerjaanAktif[i].no+" - "+pekerjaanAktif[i].nama;
-  modal.style.display="block";
+  jobInfo.innerText = pekerjaanAktif[i].no + " - " + pekerjaanAktif[i].nama;
+  modal.style.display = "block";
 }
 function closeModal(){ modal.style.display="none"; }
 
