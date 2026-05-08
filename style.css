@@ -1,0 +1,108 @@
+:root {
+  --bg: #0a0f1c;
+  --panel: rgba(255,255,255,0.06);
+  --panel-2: rgba(255,255,255,0.09);
+  --text: #e5e7eb;
+  --primary: #3b82f6;
+  --success: #22c55e;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 10px 30px rgba(0,0,0,0.4);
+  --radius: 14px;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* BODY */
+body {
+  background: radial-gradient(circle at top, #111827, #050816);
+  color: var(--text);
+  padding: 16px;
+  padding-bottom: 80px;
+}
+
+/* TITLE */
+h2 {
+  text-align: center;
+  font-size: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--panel);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* NAV */
+nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+nav button {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* LIST */
+ul { list-style: none; }
+
+li {
+  background: var(--panel);
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* BUTTON */
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-weight: 600;
+}
+
+/* FORM */
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.3);
+  color: var(--text);
+}
+
+/* MODAL */
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+}
+
+#modal .box {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  border: 1px solid var(--border);
+}
