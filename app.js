@@ -1,139 +1,165 @@
 const STORAGE_KEY = "pekerjaan_aktif";
 let pekerjaanAktif = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-/* ELEMENT */
-const jobList = document.getElementById("jobList");
-const izinForm = document.getElementById("izinForm");
-const modal = document.getElementById("modal");
+const jobList   = document.getElementById("jobList");
+const izinForm  = document.getElementById("izinForm");
 const modalForm = document.getElementById("modalForm");
-const jobIndex = document.getElementById("jobIndex");
-const jobInfo = document.getElementById("jobInfo");
-const docForm = document.getElementById("docForm");
+const modal     = document.getElementById("modal");
+const jobIndex  = document.getElementById("jobIndex");
+const jobInfo   = document.getElementById("jobInfo");
+const docForm   = document.getElementById("docForm");
 const fileInput = document.getElementById("file");
 const permitDoc = document.getElementById("permitDoc");
 const previewBox = document.getElementById("previewBox");
 const imgPreview = document.getElementById("imgPreview");
 
-/* SAVE */
-function saveStorage() {
+function saveStorage(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(pekerjaanAktif));
 }
 
-/* MENU */
-function showMenu(id) {
-  document.querySelectorAll(".menu").forEach(m => m.style.display = "none");
-  document.getElementById(id).style.display = "block";
+function showMenu(id){
+  document.querySelectorAll(".menu").forEach(m=>m.style.display="none");
+  document.getElementById(id).style.display="block";
 }
 
-/* RENDER */
-function renderList() {
-  jobList.innerHTML = "";
+document.querySelectorAll(".whatsapp").forEach(i=>{
+  i.oninput=()=>i.value=i.value.replace(/\D/g,"").replace(/^0/,"62");
+});
 
-  pekerjaanAktif.forEach((j, i) => {
-    jobList.innerHTML += `
-      <li>
-        <b>${j.no}</b> - ${j.nama}<br>
-        <small>${j.lokasi}</small><br>
-        <button onclick="openModal(${i})">Selesai</button>
-      </li>
-    `;
-  });
-
-  renderPermit();
-}
-
-/* PERMIT */
-function renderPermit() {
+function renderPermitDoc(){
   permitDoc.innerHTML = "<option value=''>Pilih Permit</option>";
-  pekerjaanAktif.forEach(p => {
-    permitDoc.innerHTML += `<option value="${p.no}">${p.no}</option>`;
+  pekerjaanAktif.forEach(p=>{
+    permitDoc.innerHTML += `<option value="${p.no}">${p.no} - ${p.nama}</option>`;
   });
+}
+
+function renderList(){
+  if(pekerjaanAktif.length===0){
+    jobList.innerHTML="<li><i>Tidak ada pekerjaan aktif</i></li>";
+    renderPermitDoc();
+    return;
+  }
+
+  jobList.innerHTML="";
+  pekerjaanAktif.forEach((j,i)=>{
+    jobList.innerHTML+=`
+      <li>
+        <b>${j.no}</b> - ${j.nama} 
+        <span style="color:green;font-weight:bold">● AKTIF</span><br>
+        <small>${j.lokasi} | ${j.jam_mulai}</small><br>
+        <button onclick="openModal(${i})">✅ Laporan Selesai</button>
+      </li>`;
+  });
+
+  renderPermitDoc();
 }
 
 renderList();
 
-/* SUBMIT MULAI */
+/* ===== SUBMIT MULAI ===== */
 izinForm.onsubmit = e => {
   e.preventDefault();
   const fd = new FormData(izinForm);
 
-  const dataBaru = {
-    no_permit: fd.get("no_permit"),
-    nama_pekerjaan: fd.get("nama_pekerjaan"),
-    unit_kontraktor: fd.get("unit_kontraktor"),
-    rencana_jam_mulai: fd.get("rencana_jam_mulai"),
-    realisasi_jam_mulai: fd.get("realisasi_jam_mulai"),
-    rencana_jam_selesai: fd.get("rencana_jam_selesai"),
-    lokasi: fd.get("lokasi"),
-    jenis_pekerjaan: fd.get("jenis_pekerjaan"),
-    deskripsi: fd.get("deskripsi"),
-    pic: fd.get("pic"),
-    whatsapp: fd.get("whatsapp"),
-    status: "PROSES",
-    waktu_input: new Date().toISOString()
-  };
+  if(pekerjaanAktif.some(p => p.no === fd.get("no_permit"))){
+    alert("❌ No Permit sudah ada");
+    return;
+  }
 
-  pekerjaanAktif.push(dataBaru);
+  fetch("https://script.google.com/macros/s/AKfycbygXu2SKRinm3KYw0rFU3kqYCRX7eu4mdp94xnkKoq1aKX7U9yW_VMHWi8Xv-8gxczZDw/exec", {
+    method: "POST",
+    mode: "no-cors",
+    body: fd
+  });
+
+  pekerjaanAktif.push({
+    no: fd.get("no_permit"),
+    nama: fd.get("nama_pekerjaan"),
+    lokasi: fd.get("lokasi"),
+    jam_mulai: fd.get("realisasi_jam_mulai")
+  });
+
   saveStorage();
   renderList();
   izinForm.reset();
-
-  // kirim ke Google Sheet
-  sendToSheet(dataBaru);
+  showMenu("dokumen");
+  alert("✅ Laporan Mulai tersimpan");
 };
 
-/* MODAL */
-function openModal(i) {
+/* ===== MODAL ===== */
+function openModal(i){
   jobIndex.value = i;
-  jobInfo.innerText = pekerjaanAktif[i].no;
-  modal.style.display = "flex";
+  jobInfo.innerText = pekerjaanAktif[i].no+" - "+pekerjaanAktif[i].nama;
+  modal.style.display="block";
 }
+function closeModal(){ modal.style.display="none"; }
 
-function closeModal() {
-  modal.style.display = "none";
-}
+modal.onclick = e => { if(e.target === modal) closeModal(); };
 
-/* SUBMIT SELESAI */
+/* ===== SUBMIT SELESAI ===== */
 modalForm.onsubmit = e => {
   e.preventDefault();
   const i = jobIndex.value;
+  if(!confirm("Yakin laporan pekerjaan sudah selesai?")) return;
 
-  pekerjaanAktif.splice(i, 1);
+  const fd = new FormData(modalForm);
+  fd.append("no_permit", pekerjaanAktif[i].no);
+
+  fetch("https://script.google.com/macros/s/AKfycbygXu2SKRinm3KYw0rFU3kqYCRX7eu4mdp94xnkKoq1aKX7U9yW_VMHWi8Xv-8gxczZDw/exec", {
+    method: "POST",
+    mode: "no-cors",
+    body: fd
+  });
+
+  pekerjaanAktif.splice(i,1);
   saveStorage();
   renderList();
+  modalForm.reset();
   closeModal();
+  alert("Laporan Selesai terkirim");
 };
 
-/* UPLOAD */
+/* ===== UPLOAD DOKUMEN ===== */
 docForm.onsubmit = e => {
   e.preventDefault();
-  alert("upload dummy");
+  const f = fileInput.files[0];
+  if (!f) return alert("Pilih file");
+
+  const permit = permitDoc.value;
+  if (!permit) return alert("Pilih permit");
+
+  const r = new FileReader();
+  r.onload = () => {
+    const fd = new FormData();
+    fd.append("action","upload_dokumentasi");
+    fd.append("no_permit",permit);
+    fd.append("filename",f.name);
+    fd.append("mime",f.type);
+    fd.append("file",r.result.split(",")[1]);
+
+    fetch("https://script.google.com/macros/s/AKfycbygXu2SKRinm3KYw0rFU3kqYCRX7eu4mdp94xnkKoq1aKX7U9yW_VMHWi8Xv-8gxczZDw/exec", {
+      method:"POST",
+      mode:"no-cors",
+      body:fd
+    });
+
+    alert("📸 Dokumentasi terkirim");
+    docForm.reset();
+    previewBox.style.display="none";
+  };
+  r.readAsDataURL(f);
 };
 
-/* PREVIEW IMAGE */
-fileInput.onchange = e => {
-  const file = e.target.files[0];
+/* ===== PREVIEW ===== */
+fileInput.onchange = function(){
+  const file = this.files[0];
+  if(!file || !file.type.startsWith("image/")) return;
+  if(file.size > 5*1024*1024) return alert("Maks 5MB");
+
   const r = new FileReader();
-  r.onload = ev => {
-    imgPreview.src = ev.target.result;
-    previewBox.style.display = "block";
+  r.onload = e=>{
+    imgPreview.src=e.target.result;
+    previewBox.style.display="block";
   };
   r.readAsDataURL(file);
 };
-
-/* KIRIM KE SPREADSHEET */
-const API_URL = "https://script.google.com/macros/s/AKfycbygXu2SKRinm3KYw0rFU3kqYCRX7eu4mdp94xnkKoq1aKX7U9yW_VMHWi8Xv-8gxczZDw/exec";
-
-async function sendToSheet(data) {
-  try {
-    await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-  } catch (err) {
-    console.log("Gagal kirim:", err);
-  }
-}
