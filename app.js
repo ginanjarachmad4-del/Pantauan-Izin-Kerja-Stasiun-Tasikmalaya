@@ -58,28 +58,29 @@ izinForm.onsubmit = e => {
   const fd = new FormData(izinForm);
 
   const dataBaru = {
-  no_permit: fd.get("no_permit"),
-  nama_pekerjaan: fd.get("nama_pekerjaan"),
-  unit_kontraktor: fd.get("unit_kontraktor"),
-  rencana_jam_mulai: fd.get("rencana_jam_mulai"),
-  realisasi_jam_mulai: fd.get("realisasi_jam_mulai"),
-  rencana_jam_selesai: fd.get("rencana_jam_selesai"),
-  lokasi: fd.get("lokasi"),
-  jenis_pekerjaan: fd.get("jenis_pekerjaan"),
-  deskripsi: fd.get("deskripsi"),
-  pic: fd.get("pic"),
-  whatsapp: fd.get("whatsapp"),
-  status: "PROSES",
-  waktu_input: new Date().toISOString()
+    no_permit: fd.get("no_permit"),
+    nama_pekerjaan: fd.get("nama_pekerjaan"),
+    unit_kontraktor: fd.get("unit_kontraktor"),
+    rencana_jam_mulai: fd.get("rencana_jam_mulai"),
+    realisasi_jam_mulai: fd.get("realisasi_jam_mulai"),
+    rencana_jam_selesai: fd.get("rencana_jam_selesai"),
+    lokasi: fd.get("lokasi"),
+    jenis_pekerjaan: fd.get("jenis_pekerjaan"),
+    deskripsi: fd.get("deskripsi"),
+    pic: fd.get("pic"),
+    whatsapp: fd.get("whatsapp"),
+    status: "PROSES",
+    waktu_input: new Date().toISOString()
+  };
+
+  pekerjaanAktif.push(dataBaru);
+  saveStorage();
+  renderList();
+  izinForm.reset();
+
+  // kirim ke Google Sheet
+  sendToSheet(dataBaru);
 };
-
-pekerjaanAktif.push(dataBaru);
-saveStorage();
-renderList();
-izinForm.reset();
-
-// kirim ke Google Sheet
-sendToSheet(dataBaru);
 
 /* MODAL */
 function openModal(i) {
@@ -109,7 +110,7 @@ docForm.onsubmit = e => {
   alert("upload dummy");
 };
 
-/* PREVIEW */
+/* PREVIEW IMAGE */
 fileInput.onchange = e => {
   const file = e.target.files[0];
   const r = new FileReader();
