@@ -172,20 +172,8 @@ input, select, textarea {
   
 .app-header {
   position: relative;
-  top: 0;
-  z-index: 999;
-  backdrop-filter: blur(10px);
-  background: rgba(10,15,28,0.7);
-}
-
-/* HEADER FIX */
-.app-header {
-  position: relative;
-  top: 0;
-  z-index: 999;
-  backdrop-filter: blur(10px);
-  background: rgba(10,15,28,0.7);
-  padding: 12px;
+  background: transparent;
+  padding: 12px 0;
   margin-bottom: 12px;
 }
 
