@@ -1,3 +1,6 @@
+let filterStatus = "ALL";
+let searchQuery = "";
+
 const STORAGE_KEY = "pekerjaan_aktif";
 let pekerjaanAktif = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
@@ -12,6 +15,16 @@ const fileInput = document.getElementById("file");
 const permitDoc = document.getElementById("permitDoc");
 const previewBox = document.getElementById("previewBox");
 const imgPreview = document.getElementById("imgPreview");
+
+function setFilter(status){
+  filterStatus = status;
+  renderList();
+}
+
+document.getElementById("searchInput").oninput = (e) => {
+  searchQuery = e.target.value.toLowerCase();
+  renderList();
+};
 
 function saveStorage(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(pekerjaanAktif));
@@ -34,26 +47,43 @@ function renderPermitDoc(){
 }
 
 function renderList(){
-  if(pekerjaanAktif.length===0){
-    jobList.innerHTML="<li><i>Tidak ada pekerjaan aktif</i></li>";
-    renderPermitDoc();
+
+  let data = pekerjaanAktif;
+
+  // FILTER STATUS
+  if(filterStatus !== "ALL"){
+    data = data.filter(j => j.status === filterStatus);
+  }
+
+  // SEARCH
+  if(searchQuery){
+    data = data.filter(j =>
+      j.no.toLowerCase().includes(searchQuery) ||
+      j.nama.toLowerCase().includes(searchQuery)
+    );
+  }
+
+  jobList.innerHTML = "";
+
+  if(data.length === 0){
+    jobList.innerHTML = "<li><i>Tidak ada data</i></li>";
     return;
   }
 
-  jobList.innerHTML="";
-pekerjaanAktif.forEach((j,i)=>{
-  jobList.innerHTML+=`
-    <li>
-      <b>${j.no}</b> - ${j.nama}
+  data.forEach((j,i)=>{
+    jobList.innerHTML += `
+      <li>
+        <b>${j.no}</b> - ${j.nama}
 
-      <span class="status ${j.status}">
-        ● ${j.status}
-      </span>
+        <span class="status ${j.status}">
+          ● ${j.status}
+        </span>
 
-      <small>${j.lokasi} | ${j.jam_mulai}</small><br>
-      <button onclick="openModal(${i})">✅ Laporan Selesai</button>
-    </li>`;
-});
+        <small>${j.lokasi} | ${j.jam_mulai}</small><br>
+        <button onclick="openModal(${i})">✅ Laporan Selesai</button>
+      </li>
+    `;
+  });
 
   renderPermitDoc();
 }
@@ -102,7 +132,7 @@ izinForm.onsubmit = e => {
 };
 
 /* ===== MODAL ===== */
-function openModal(i){
+function openModal(pekerjaanAktif.indexOf(j))
   jobIndex.value = i;
   jobInfo.innerText = pekerjaanAktif[i].no+" - "+pekerjaanAktif[i].nama;
   modal.style.display="block";
