@@ -138,7 +138,7 @@ input, select, textarea {
   border: 1px solid var(--border);
 }
 
-/* HEADER LOGO UTAMA */
+/* HEADER LOGO BOX */
 .logo-box {
   width: 40px;
   height: 40px;
@@ -146,29 +146,20 @@ input, select, textarea {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+/* IMAGE LOGO */
+.logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
   transition: all 0.2s ease;
 }
 
 .logo:hover {
   transform: scale(1.05);
   filter: drop-shadow(0 0 10px rgba(59,130,246,0.5));
-}
-
-/* BUNGKUS HEADER LOGO */
-.logo-bar {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.logo-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  width: 40px;
-  height: 40px;
 }
   
 .app-header {
