@@ -293,3 +293,47 @@ mark {
     flex-direction: column;
   }
 }
+
+/* ===== Footer Professional ===== */
+.site-footer {
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 30px;
+  text-align: center;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-left {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.footer-right a {
+  margin: 0 8px;
+  font-size: 14px;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-right a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* Responsif: Footer kolom jadi stack di mobile */
+@media (max-width: 600px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
