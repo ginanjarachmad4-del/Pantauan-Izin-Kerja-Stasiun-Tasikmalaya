@@ -269,3 +269,27 @@ mark {
   background: yellow;
   color: black;
 }
+
+/* DUA KOLOM UTAMA */
+.main-layout {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+}
+
+/* kiri selalu lebih kecil sedikit */
+.left-frame {
+  flex: 0.45;
+}
+
+/* kanan lebih besar */
+.right-frame {
+  flex: 0.55;
+}
+
+/* buat responsif di mobile */
+@media screen and (max-width: 900px) {
+  .main-layout {
+    flex-direction: column;
+  }
+}
