@@ -31,84 +31,98 @@
 
 </header>
 
-<nav>
-  <button onclick="showMenu('mulai')">🟢 Laporan Mulai</button>
-  <button onclick="showMenu('dokumen')">📸 Dokumentasi</button>
-</nav>
+<!-- ===== MAIN LAYOUT (2 COLUMNS) ===== -->
+<div class="main-layout">
 
-<hr>
+  <!-- ===== KIRI ===== -->
+  <div class="left-frame">
 
-<h3>📋 Pekerjaan Aktif</h3>
+    <nav>
+      <button onclick="showMenu('mulai')">🟢 Laporan Mulai</button>
+      <button onclick="showMenu('dokumen')">📸 Dokumentasi</button>
+    </nav>
 
-  <div class="toolbar">
+    <!-- LAPORAN MULAI -->
+    <section id="mulai" class="menu">
+      <form id="izinForm">
 
-  <input type="text" id="searchInput" placeholder="🔍 Cari no permit / nama...">
+        <input name="no_permit" placeholder="No Permit / No WKP / No WAD" required><br>
+        <input name="nama_pekerjaan" placeholder="Nama Pekerjaan" required><br>
+        <input name="unit_kontraktor" placeholder="Unit / Kontraktor" required><br>
 
-  <div class="filter-btns">
-    <button onclick="setFilter('ALL')">ALL</button>
-    <button onclick="setFilter('PROSES')">PROSES</button>
-    <button onclick="setFilter('SELESAI')">SELESAI</button>
+        <label>Rencana Jam Mulai</label><br>
+        <input type="time" name="rencana_jam_mulai" required><br>
+
+        <label>Realisasi Jam Mulai</label><br>
+        <input type="time" name="realisasi_jam_mulai" required><br>
+
+        <label>Rencana Jam Selesai</label><br>
+        <input type="time" name="rencana_jam_selesai" required><br>
+
+        <input name="lokasi" placeholder="Lokasi Pekerjaan" required><br>
+
+        <select name="jenis_pekerjaan" required>
+          <option value="">Jenis Pekerjaan</option>
+          <option>Perawatan</option>
+          <option>Perbaikan</option>
+          <option>Instalasi</option>
+          <option>Pemeriksaan</option>
+        </select><br>
+
+        <textarea name="deskripsi" placeholder="Deskripsi Pekerjaan" required></textarea><br>
+
+        <input name="pic" placeholder="PIC / Penanggung Jawab" required><br>
+        <input class="whatsapp" name="whatsapp" placeholder="628xxxx" required><br><br>
+
+        <button type="submit">Kirim Laporan Mulai</button>
+
+      </form>
+    </section>
+
+    <!-- DOKUMENTASI -->
+    <section id="dokumen" class="menu" style="display:none">
+      <form id="docForm">
+
+        <select name="no_permit" id="permitDoc" required>
+          <option value="">Pilih Permit</option>
+        </select><br><br>
+
+        <input type="file" id="file" accept="image/*" required>
+
+        <div id="previewBox" style="margin-top:10px; display:none;">
+          <p style="font-weight:600">Preview Dokumentasi:</p>
+          <img id="imgPreview">
+        </div>
+
+        <br>
+        <button type="submit">Upload</button>
+
+      </form>
+    </section>
+
+  </div>
+
+  <!-- ===== KANAN ===== -->
+  <div class="right-frame">
+
+    <h3>📋 Pekerjaan Aktif</h3>
+
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="🔍 Cari no permit / nama...">
+      <div class="filter-btns">
+        <button onclick="setFilter('ALL')">ALL</button>
+        <button onclick="setFilter('PROSES')">PROSES</button>
+        <button onclick="setFilter('SELESAI')">SELESAI</button>
+      </div>
+    </div>
+
+    <ul id="jobList"></ul>
+
   </div>
 
 </div>
-<ul id="jobList"></ul>
 
-<!-- ===== MULAI ===== -->
-<section id="mulai" class="menu">
-<form id="izinForm">
-
-  <input name="no_permit" placeholder="No Permit / No WKP / No WAD" required><br>
-  <input name="nama_pekerjaan" placeholder="Nama Pekerjaan" required><br>
-  <input name="unit_kontraktor" placeholder="Unit / Kontraktor" required><br>
-
-  <label>Rencana Jam Mulai</label><br>
-  <input type="time" name="rencana_jam_mulai" required><br>
-
-  <label>Realisasi Jam Mulai</label><br>
-  <input type="time" name="realisasi_jam_mulai" required><br>
-
-  <label>Rencana Jam Selesai</label><br>
-  <input type="time" name="rencana_jam_selesai" required><br>
-
-  <input name="lokasi" placeholder="Lokasi Pekerjaan" required><br>
-
-  <select name="jenis_pekerjaan" required>
-    <option value="">Jenis Pekerjaan</option>
-    <option>Perawatan</option>
-    <option>Perbaikan</option>
-    <option>Instalasi</option>
-    <option>Pemeriksaan</option>
-  </select><br>
-
-  <textarea name="deskripsi" placeholder="Deskripsi Pekerjaan" required></textarea><br>
-
-  <input name="pic" placeholder="PIC / Penanggung Jawab" required><br>
-  <input class="whatsapp" name="whatsapp" placeholder="628xxxx" required><br><br>
-
-  <button type="submit">Kirim Laporan Mulai</button>
-
-</form>
-</section>
-
-<!-- ===== DOKUMENTASI ===== -->
-<section id="dokumen" class="menu" style="display:none">
-<form id="docForm">
-
-  <select name="no_permit" id="permitDoc" required>
-    <option value="">Pilih Permit</option>
-  </select><br><br>
-
-  <input type="file" id="file" accept="image/*" required>
-
-  <div id="previewBox" style="margin-top:10px; display:none;">
-    <p style="font-weight:600">Preview Dokumentasi:</p>
-    <img id="imgPreview">
-  </div>
-
-  <br>
-  <button type="submit">Upload</button>
-</form>
-</section>
+<hr>
 
 <!-- ===== MODAL ===== -->
 <div id="modal">
