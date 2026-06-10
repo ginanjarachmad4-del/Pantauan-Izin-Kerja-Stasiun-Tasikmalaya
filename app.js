@@ -107,7 +107,7 @@ izinForm.onsubmit = e => {
     return;
   }
 
-  fetch("https://script.google.com/macros/s/AKfycbyubl8uWxiNp9X3pBMMsvgiwMnS12sTKmVUyVRtNbtiCfGtK3PuxNq6x6Ucx3Cunp7gyw/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyC5e3xEj4vI_CHuLCx4SkGhAC5pHOOtOBdY_M4Uqdo5MpWFUDS5T8iOCk0AjhgRPIhLA/exec", {
     method: "POST",
     mode: "no-cors",
     body: fd
@@ -158,7 +158,7 @@ if (!pekerjaanAktif[i]) {
   const fd = new FormData(modalForm);
   fd.append("no_permit", pekerjaanAktif[i].no);
 
-  fetch("https://script.google.com/macros/s/AKfycbyubl8uWxiNp9X3pBMMsvgiwMnS12sTKmVUyVRtNbtiCfGtK3PuxNq6x6Ucx3Cunp7gyw/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyC5e3xEj4vI_CHuLCx4SkGhAC5pHOOtOBdY_M4Uqdo5MpWFUDS5T8iOCk0AjhgRPIhLA/exec", {
     method: "POST",
     mode: "no-cors",
     body: fd
@@ -190,7 +190,7 @@ docForm.onsubmit = e => {
     fd.append("mime",f.type);
     fd.append("file",r.result.split(",")[1]);
 
-    fetch("https://script.google.com/macros/s/AKfycbyubl8uWxiNp9X3pBMMsvgiwMnS12sTKmVUyVRtNbtiCfGtK3PuxNq6x6Ucx3Cunp7gyw/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbyC5e3xEj4vI_CHuLCx4SkGhAC5pHOOtOBdY_M4Uqdo5MpWFUDS5T8iOCk0AjhgRPIhLA/exec", {
       method:"POST",
       mode:"no-cors",
       body:fd
