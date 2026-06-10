@@ -106,7 +106,7 @@ izinForm.onsubmit = e => {
     btn.innerText = "Kirim Laporan Mulai";
     return;
   }
-
+fd.append("action", "laporan_mulai");
   fetch("https://script.google.com/macros/s/AKfycbyC5e3xEj4vI_CHuLCx4SkGhAC5pHOOtOBdY_M4Uqdo5MpWFUDS5T8iOCk0AjhgRPIhLA/exec", {
     method: "POST",
     mode: "no-cors",
