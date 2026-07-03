@@ -2,7 +2,11 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pantauan Izin Kerja Stasiun Tasikmalaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,21 +16,21 @@
 
   <div class="logo-bar">
     <div class="logo-left">
-      <img src="https://raw.githubusercontent.com/ginanjarachmad4-del/asset-logo/main/logo_danantara_putih.png" width="90">
+      <img src="https://raw.githubusercontent.com/ginanjarachmad4-del/asset-logo/main/logo_danantara_putih.png" width="80">
     </div>
 
     <div class="logo-center">
-      <img src="https://raw.githubusercontent.com/ginanjarachmad4-del/asset-logo/refs/heads/main/logo_citar_2025_putih.png" width="90">
+      <img src="https://raw.githubusercontent.com/ginanjarachmad4-del/asset-logo/refs/heads/main/logo_citar_2025_putih.png" width="80">
     </div>
 
     <div class="logo-right">
-      <img src="https://raw.githubusercontent.com/ginanjarachmad4-del/asset-logo/refs/heads/main/logo_kai_putih.png" width="70">
+      <img src="https://raw.githubusercontent.com/ginanjarachmad4-del/asset-logo/refs/heads/main/logo_kai_putih.png" width="62">
     </div>
   </div>
 
   <div class="title">
     <strong>PANTAUAN IZIN KERJA</strong><br>
-    Stasiun Tasikmalaya - DAOP 2 Bandung
+    <span>Stasiun Tasikmalaya &mdash; DAOP 2 Bandung</span>
   </div>
 
 </header>
@@ -38,23 +42,30 @@
   <div class="left-frame">
 
     <nav>
-      <button onclick="showMenu('mulai')">🟢 Laporan Mulai</button>
-      <button onclick="showMenu('dokumen')">📸 Dokumentasi</button>
+      <button class="nav-btn active" data-menu="mulai" onclick="showMenu('mulai', this)">🟢 Laporan Mulai</button>
+      <button class="nav-btn" data-menu="dokumen" onclick="showMenu('dokumen', this)">📸 Dokumentasi</button>
+      <button class="nav-btn" data-menu="efektif" onclick="showMenu('efektif', this)">⏱️ Waktu Efektif</button>
     </nav>
 
     <!-- LAPORAN MULAI -->
-    <section id="mulai" class="menu">
+    <section id="mulai" class="menu card">
+      <h2 class="card-title">Laporan Mulai Pekerjaan</h2>
       <form id="izinForm">
 
         <input name="no_permit" placeholder="No Permit / No WKP / No WAD" required><br>
         <input name="nama_pekerjaan" placeholder="Nama Pekerjaan" required><br>
         <input name="unit_kontraktor" placeholder="Unit / Kontraktor" required><br>
 
-        <label>Rencana Jam Mulai</label><br>
-        <input type="time" name="rencana_jam_mulai" required><br>
-
-        <label>Realisasi Jam Mulai</label><br>
-        <input type="time" name="realisasi_jam_mulai" required><br>
+        <div class="grid-2">
+          <div>
+            <label>Rencana Jam Mulai</label>
+            <input type="time" name="rencana_jam_mulai" required>
+          </div>
+          <div>
+            <label>Realisasi Jam Mulai</label>
+            <input type="time" name="realisasi_jam_mulai" required>
+          </div>
+        </div>
 
         <label>Rencana Jam Selesai</label><br>
         <input type="time" name="rencana_jam_selesai" required><br>
@@ -71,33 +82,90 @@
 
         <textarea name="deskripsi" placeholder="Deskripsi Pekerjaan" required></textarea><br>
 
-        <input name="pic" placeholder="PIC / Penanggung Jawab" required><br>
+        <label>PIC / Penanggung Jawab</label>
+        <div class="grid-2">
+          <input name="pic_nama" placeholder="Nama" required>
+          <input name="pic_nipp" placeholder="NIPP" required>
+        </div>
+        <div class="grid-2">
+          <input name="pic_jabatan" placeholder="Jabatan" required>
+          <input name="pic_kedudukan" placeholder="Kedudukan" required>
+        </div>
         <input class="whatsapp" name="whatsapp" placeholder="628xxxx" required><br><br>
 
-        <button type="submit">Kirim Laporan Mulai</button>
+        <button type="submit" class="btn btn-primary">Kirim Laporan Mulai</button>
 
       </form>
     </section>
 
     <!-- DOKUMENTASI -->
-    <section id="dokumen" class="menu" style="display:none">
+    <section id="dokumen" class="menu card" style="display:none">
+      <h2 class="card-title">Dokumentasi Pekerjaan</h2>
       <form id="docForm">
 
         <select name="no_permit" id="permitDoc" required>
           <option value="">Pilih Permit</option>
         </select><br><br>
 
-        <input type="file" id="file" accept="image/*" required>
+        <label class="file-drop" for="file">
+          <span id="fileLabelText">📎 Pilih atau seret beberapa foto sekaligus</span>
+        </label>
+        <input type="file" id="file" accept="image/*" multiple hidden>
 
-        <div id="previewBox" style="margin-top:10px; display:none;">
-          <p style="font-weight:600">Preview Dokumentasi:</p>
-          <img id="imgPreview">
+        <div id="previewBox" class="preview-box" style="display:none;">
+          <p class="preview-title">Preview Dokumentasi (<span id="previewCount">0</span> foto)</p>
+          <div id="previewGrid" class="preview-grid"></div>
         </div>
 
         <br>
-        <button type="submit">Upload</button>
+        <button type="submit" class="btn btn-primary">Upload</button>
 
       </form>
+    </section>
+
+    <!-- WAKTU EFEKTIF -->
+    <section id="efektif" class="menu card" style="display:none">
+      <h2 class="card-title">Kalkulator Waktu Efektif</h2>
+      <p class="card-subtitle">Waktu Efektif = Jatah Waktu Kerja &minus; Istirahat &minus; Total Waktu Antar Senggang KA</p>
+
+      <label>Jatah Waktu Kerja (menit)</label>
+      <input type="number" id="jatahWaktu" min="0" value="600">
+
+      <label>Istirahat (menit)</label>
+      <input type="number" id="istirahat" min="0" value="60">
+
+      <label>Waktu Antar Senggang KA (menit)</label>
+      <div id="senggangList" class="senggang-list">
+        <div class="senggang-row">
+          <input type="number" class="senggang-input" min="0" value="30" placeholder="Senggang ke-1">
+          <button type="button" class="btn-remove" onclick="removeSenggang(this)" title="Hapus">✕</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline btn-add" onclick="addSenggang()">+ Tambah Senggang KA</button>
+
+      <button type="button" class="btn btn-accent btn-hitung" onclick="hitungEfektif()">⏱️ Hitung Waktu Efektif</button>
+
+      <div id="hasilEfektif" class="result-box" style="display:none">
+        <div class="result-grid">
+          <div class="result-item">
+            <span class="result-label">Jatah Waktu Kerja</span>
+            <span class="result-value" id="resJatah">0 menit</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Istirahat</span>
+            <span class="result-value" id="resIstirahat">0 menit</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Total Senggang KA</span>
+            <span class="result-value" id="resSenggang">0 menit</span>
+          </div>
+        </div>
+        <div class="result-main" id="resultMainBox">
+          <span class="result-main-label">Waktu Efektif</span>
+          <span class="result-main-value" id="resEfektif">0 menit</span>
+          <span class="result-main-sub" id="resEfektifJam"></span>
+        </div>
+      </div>
     </section>
 
   </div>
@@ -105,26 +173,26 @@
   <!-- ===== KANAN ===== -->
   <div class="right-frame">
 
-    <h3>📋 Pekerjaan Aktif</h3>
+    <div class="card list-card">
+      <h3 class="card-title">📋 Pekerjaan Aktif</h3>
 
-    <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="🔍 Cari no permit / nama...">
-      <div class="filter-btns">
-        <button onclick="setFilter('ALL')">ALL</button>
-        <button onclick="setFilter('PROSES')">PROSES</button>
-        <button onclick="setFilter('SELESAI')">SELESAI</button>
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="🔍 Cari no permit / nama...">
+        <div class="filter-btns">
+          <button class="filter-btn active" data-filter="ALL" onclick="setFilter('ALL', this)">Semua</button>
+          <button class="filter-btn" data-filter="PROSES" onclick="setFilter('PROSES', this)">Proses</button>
+          <button class="filter-btn" data-filter="SELESAI" onclick="setFilter('SELESAI', this)">Selesai</button>
+        </div>
       </div>
-    </div>
 
-    <ul id="jobList"></ul>
+      <ul id="jobList"></ul>
+    </div>
 
   </div>
 </div>
 
-<hr>
-
-<!-- ===== MODAL ===== -->
-<div id="modal">
+<!-- ===== MODAL: LAPORAN SELESAI ===== -->
+<div id="modal" class="modal-overlay">
   <div class="box">
     <h3>Laporan Selesai</h3>
 
@@ -138,29 +206,209 @@
 
       <textarea name="hasil_pekerjaan" placeholder="Hasil pekerjaan" required></textarea><br><br>
 
-      <button type="submit">Kirim</button>
-      <button type="button" onclick="closeModal()">Batal</button>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-gray" onclick="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">Kirim</button>
+      </div>
     </form>
+  </div>
+</div>
 
-    
+<!-- ===== MODAL: TENTANG SISTEM ===== -->
+<div id="aboutModal" class="modal-overlay">
+  <div class="box about-box">
+    <h3>Tentang Sistem</h3>
+
+    <div class="about-brand">
+      <span class="footer-logo-badge">PIK</span>
+      <span class="about-brand-text">Pantauan Izin Kerja</span>
+    </div>
+
+    <p class="about-text">
+      Sistem pemantauan dan pelaporan izin kerja secara digital untuk mendukung
+      keselamatan dan ketertiban operasional perkeretaapian.
+    </p>
+
+    <p class="about-text">
+      Sistem ini memudahkan pemantauan izin kerja langsung dari lapangan &mdash;
+      sehingga atasan dapat mengetahui pekerjaan-pekerjaan yang sedang berjalan
+      pada hari itu secara real-time. Setiap laporan yang masuk juga otomatis
+      tercatat pada spreadsheet digital sebagai backup harian dokumentasi pekerjaan.
+    </p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" onclick="closeAbout()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: PANDUAN PENGGUNA ===== -->
+<div id="guideModal" class="modal-overlay">
+  <div class="box guide-box">
+    <h3>Panduan Pengguna</h3>
+
+    <div class="guide-scroll">
+
+      <div class="guide-step">
+        <div class="guide-step-icon">🟢</div>
+        <div class="guide-step-body">
+          <h4>1. Laporan Mulai</h4>
+          <p>Isi data pekerjaan di tab <b>Laporan Mulai</b>: No Permit/WKP/WAD, nama pekerjaan, unit/kontraktor, jam rencana &amp; realisasi, lokasi, jenis pekerjaan, deskripsi, serta data PIC (Nama, NIPP, Jabatan, Kedudukan). Tekan <b>Kirim Laporan Mulai</b> dan pekerjaan otomatis muncul di daftar <b>Pekerjaan Aktif</b> dengan status <span class="status PROSES">PROSES</span>.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-icon">📸</div>
+        <div class="guide-step-body">
+          <h4>2. Dokumentasi</h4>
+          <p>Buka tab <b>Dokumentasi</b>, pilih No Permit yang sesuai, lalu pilih foto &mdash; bisa lebih dari satu sekaligus. Cek preview-nya, hapus foto yang salah dengan tombol ✕ bila perlu, lalu tekan <b>Upload</b>.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-icon">⏱️</div>
+        <div class="guide-step-body">
+          <h4>3. Waktu Efektif</h4>
+          <p>Gunakan tab <b>Waktu Efektif</b> untuk menghitung sisa waktu kerja riil. Isi Jatah Waktu Kerja, Istirahat, dan Waktu Antar Senggang KA (tambah baris jika kereta lewat lebih dari sekali), lalu tekan <b>Hitung Waktu Efektif</b> untuk melihat hasilnya.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-icon">📋</div>
+        <div class="guide-step-body">
+          <h4>4. Pekerjaan Aktif</h4>
+          <p>Panel kanan menampilkan seluruh pekerjaan yang sudah dilaporkan. Gunakan kolom pencarian atau tombol filter (Semua/Proses/Selesai) untuk menemukan pekerjaan tertentu.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-icon">✅</div>
+        <div class="guide-step-body">
+          <h4>5. Laporan Selesai</h4>
+          <p>Jika pekerjaan sudah rampung, tekan tombol <b>✅ Laporan Selesai</b> pada kartu pekerjaan terkait, isi realisasi jam selesai dan hasil pekerjaan, lalu kirim. Status pekerjaan otomatis berubah menjadi <span class="status SELESAI">SELESAI</span>.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" onclick="closeGuide()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: KONTAK & BANTUAN ===== -->
+<div id="helpModal" class="modal-overlay">
+  <div class="box guide-box">
+    <h3>Kontak &amp; Bantuan</h3>
+
+    <div class="guide-scroll">
+
+      <div class="help-section">
+        <h4 class="help-heading">📞 Kontak Pengembang</h4>
+        <p class="help-desc">Ada kendala teknis atau saran perbaikan? Hubungi:</p>
+        <div class="contact-card">
+          <div class="contact-avatar">AG</div>
+         <div>
+            <div class="contact-name">Achmad Teguh Ginanjar</div>
+            <div class="contact-nipp">NIPP 61762</div>
+            <div class="contact-nipp">📲 085180850412</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-avatar">IN</div>
+          <div>
+            <div class="contact-name">Irfan Mulyo Nugroho</div>
+            <div class="contact-nipp">NIPP 69099</div>
+            <div class="contact-nipp">📲 081322147008</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h4 class="help-heading">❓ Pertanyaan Umum (FAQ)</h4>
+
+        <div class="faq-item">
+          <p class="faq-q">Kenapa laporan yang saya kirim tidak muncul di daftar Pekerjaan Aktif?</p>
+          <p class="faq-a">Pastikan semua kolom wajib sudah terisi. Satu No Permit boleh dipakai untuk beberapa pekerjaan berbeda, tapi sistem akan menolak jika No Permit dan Nama Pekerjaan sama persis dengan laporan yang sudah ada (dianggap duplikat).</p>
+        </div>
+
+        <div class="faq-item">
+          <p class="faq-q">Kenapa upload foto dokumentasi gagal atau tidak terkirim?</p>
+          <p class="faq-a">Cek koneksi internet, pastikan format file berupa gambar, dan ukuran tiap foto tidak lebih dari 5MB.</p>
+        </div>
+
+        <div class="faq-item">
+          <p class="faq-q">Data pekerjaan hilang setelah ganti perangkat atau hapus cache browser?</p>
+          <p class="faq-a">Daftar Pekerjaan Aktif tersimpan di penyimpanan lokal perangkat yang digunakan. Namun setiap laporan yang terkirim tetap tersimpan sebagai backup di spreadsheet, jadi datanya tidak hilang.</p>
+        </div>
+
+        <div class="faq-item">
+          <p class="faq-q">Bagaimana cara menghitung Waktu Efektif?</p>
+          <p class="faq-a">Buka tab Waktu Efektif, isi Jatah Waktu Kerja, Istirahat, dan Waktu Antar Senggang KA, lalu tekan Hitung Waktu Efektif.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" onclick="closeHelp()">Tutup</button>
+    </div>
   </div>
 </div>
 
 <script src="app.js"></script>
 
- <footer class="site-footer">
-  <div class="footer-container">
-    <div class="footer-left">
-      <p>&copy; 2025 All Rights Reserved <br> 
-       61762 Achmad Teguh Ginanjar<br> 
-      69099 Irfan Mulyo Nugroho</p>
+<footer class="site-footer">
+  <div class="footer-top">
+
+    <div class="footer-col footer-brand">
+      <div class="footer-logo">
+        <span class="footer-logo-badge">PIK</span>
+        <span class="footer-logo-text">Pantauan Izin<br>Kerja</span>
+      </div>
+      <p class="footer-desc">
+        Sistem pemantauan dan pelaporan izin kerja secara digital untuk
+        mendukung keselamatan dan ketertiban operasional perkeretaapian.
+      </p>
     </div>
-    <div class="footer-right">
-      <a href="#">Tentang</a>
-      <a href="#">Kontak</a>
-      <a href="#">Bantuan</a>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Tautan</h4>
+      <a href="#" onclick="openAbout(); return false;">Tentang Sistem</a>
+      <a href="#" onclick="openGuide(); return false;">Panduan Pengguna</a>
+      <a href="#" onclick="openHelp(); return false;">Kontak &amp; Bantuan</a>
     </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Unit Kerja</h4>
+      <p class="footer-text">Stasiun Tasikmalaya</p>
+      <p class="footer-text">DAOP 2 Bandung</p>
+      <p class="footer-text">PT Kereta Api Indonesia (Persero)</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Dikembangkan Oleh</h4>
+      <div class="footer-dev">
+        <span class="footer-dev-name">Achmad Teguh Ginanjar</span>
+        <span class="footer-dev-nipp">NIPP 61762</span>
+      </div>
+      <div class="footer-dev">
+        <span class="footer-dev-name">Irfan Mulyo Nugroho</span>
+        <span class="footer-dev-nipp">NIPP 69099</span>
+      </div>
+    </div>
+
   </div>
-</footer>        
-  
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 Pantauan Izin Kerja &mdash; Stasiun Tasikmalaya. All rights reserved.</p>
+    <span class="footer-version">v1.1</span>
+  </div>
+</footer>
+
+</body>
 </html>
