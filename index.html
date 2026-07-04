@@ -45,6 +45,7 @@
       <button class="nav-btn active" data-menu="mulai" onclick="showMenu('mulai', this)">🟢 Laporan Mulai</button>
       <button class="nav-btn" data-menu="dokumen" onclick="showMenu('dokumen', this)">📸 Dokumentasi</button>
       <button class="nav-btn" data-menu="efektif" onclick="showMenu('efektif', this)">⏱️ Waktu Efektif</button>
+      <button class="nav-btn" data-menu="history" onclick="showMenu('history', this)">🗂️ History</button>
     </nav>
 
     <!-- LAPORAN MULAI -->
@@ -168,6 +169,19 @@
       </div>
     </section>
 
+    <!-- HISTORY PEKERJAAN -->
+    <section id="history" class="menu card" style="display:none">
+      <h2 class="card-title">History Pekerjaan</h2>
+      <p class="card-subtitle">Data seluruh pekerjaan yang pernah dilaporkan, diambil langsung dari Spreadsheet backup.</p>
+
+      <div class="toolbar">
+        <input type="text" id="historySearch" placeholder="🔍 Cari no permit / nama...">
+        <input type="date" id="historyDate">
+      </div>
+
+      <ul id="historyList"><li><i>⏳ Memuat data history...</i></li></ul>
+    </section>
+
   </div>
 
   <!-- ===== KANAN ===== -->
@@ -289,6 +303,14 @@
         </div>
       </div>
 
+      <div class="guide-step">
+        <div class="guide-step-icon">🗂️</div>
+        <div class="guide-step-body">
+          <h4>6. History Pekerjaan</h4>
+          <p>Daftar <b>Pekerjaan Aktif</b> otomatis kosong lagi tiap ganti hari. Untuk melihat pekerjaan hari-hari sebelumnya, buka tab <b>History</b> &mdash; datanya diambil langsung dari Spreadsheet backup, bisa dicari atau difilter per tanggal.</p>
+        </div>
+      </div>
+
     </div>
 
     <div class="modal-actions">
@@ -341,7 +363,7 @@
 
         <div class="faq-item">
           <p class="faq-q">Data pekerjaan hilang setelah ganti perangkat atau hapus cache browser?</p>
-          <p class="faq-a">Daftar Pekerjaan Aktif tersimpan di penyimpanan lokal perangkat yang digunakan. Namun setiap laporan yang terkirim tetap tersimpan sebagai backup di spreadsheet, jadi datanya tidak hilang.</p>
+          <p class="faq-a">Daftar Pekerjaan Aktif tersimpan di penyimpanan lokal perangkat yang digunakan, dan otomatis kosong lagi tiap ganti hari. Namun setiap laporan yang terkirim tetap tersimpan sebagai backup di spreadsheet dan bisa dilihat lagi kapan saja lewat tab History, jadi datanya tidak hilang.</p>
         </div>
 
         <div class="faq-item">
