@@ -1,9 +1,10 @@
 let filterStatus = "ALL";
 let searchQuery = "";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3HjIHE-6K2t3DXRso9T7ezJijjjWy19llUPKqoym532OcOUQeZZiYMDA_2EI-Kpc5pA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdDejh6b4lOfwn1DfaR0TfWcii9D5D_Fwv6EoSSArrn2gOz62pvGXDyoHD_vYuvnFTCg/exec";
 
 const STORAGE_KEY = "pekerjaan_aktif";
+const LAST_DATE_KEY = "pekerjaan_tanggal";
 let pekerjaanAktif = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
 const jobList   = document.getElementById("jobList");
@@ -32,6 +33,8 @@ function showMenu(id, btn){
 
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
   if(btn) btn.classList.add("active");
+
+  if(id === "history") loadHistory();
 }
 
 /* ===== FILTER ===== */
@@ -50,6 +53,25 @@ document.getElementById("searchInput").oninput = (e) => {
 function saveStorage(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(pekerjaanAktif));
 }
+
+/* ===== RESET HARIAN =====
+   Setiap ganti hari (tanggal lokal berubah), daftar Pekerjaan Aktif
+   dikosongkan otomatis. Data yang sudah terkirim tetap aman tersimpan
+   di Spreadsheet dan bisa dilihat lagi lewat tab History. */
+function getTodayStr(){
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+
+(function resetHarian(){
+  const todayStr = getTodayStr();
+  const lastDate = localStorage.getItem(LAST_DATE_KEY);
+  if (lastDate !== todayStr) {
+    pekerjaanAktif = [];
+    saveStorage();
+    localStorage.setItem(LAST_DATE_KEY, todayStr);
+  }
+})();
 
 document.querySelectorAll(".whatsapp").forEach(i=>{
   i.oninput=()=>i.value=i.value.replace(/\D/g,"").replace(/^0/,"62");
@@ -125,7 +147,10 @@ izinForm.onsubmit = e => {
     btn.innerText = "Kirim Laporan Mulai";
     return;
   }
+  const newId = Date.now();
+
   fd.append("action", "laporan_mulai");
+  fd.append("id", newId);
   fd.append("pic", `${fd.get("pic_nama")} | ${fd.get("pic_nipp")} | ${fd.get("pic_jabatan")} | ${fd.get("pic_kedudukan")}`);
   fetch(SCRIPT_URL, {
     method: "POST",
@@ -134,7 +159,7 @@ izinForm.onsubmit = e => {
   });
 
   pekerjaanAktif.push({
-    id: Date.now(),
+    id: newId,
     no: fd.get("no_permit"),
     nama: fd.get("nama_pekerjaan"),
     lokasi: fd.get("lokasi"),
@@ -198,6 +223,8 @@ modalForm.onsubmit = e => {
   if(!confirm("Yakin laporan pekerjaan sudah selesai?")) return;
 
   const fd = new FormData(modalForm);
+  fd.append("action", "laporan_selesai");
+  fd.append("id", pekerjaanAktif[i].id);
   fd.append("no_permit", pekerjaanAktif[i].no);
 
   fetch(SCRIPT_URL, {
@@ -380,3 +407,69 @@ function hitungEfektif(){
 
   document.getElementById("hasilEfektif").style.display = "block";
 }
+
+/* ============================================================
+   ===== HISTORY PEKERJAAN (dari Spreadsheet via Apps Script) ===
+   ============================================================ */
+
+const historyList   = document.getElementById("historyList");
+const historyDate   = document.getElementById("historyDate");
+const historySearch = document.getElementById("historySearch");
+
+let historyData = [];
+let historyLoaded = false;
+
+function loadHistory(){
+  historyList.innerHTML = "<li><i>⏳ Memuat data history...</i></li>";
+
+  const dateParam = historyDate.value ? `&date=${encodeURIComponent(historyDate.value)}` : "";
+
+  fetch(`${SCRIPT_URL}?action=history${dateParam}`)
+    .then(res => res.json())
+    .then(data => {
+      historyData = Array.isArray(data) ? data : [];
+      historyLoaded = true;
+      renderHistory();
+    })
+    .catch(() => {
+      historyList.innerHTML = "<li><i>⚠️ Gagal memuat history. Cek koneksi internet lalu coba lagi.</i></li>";
+    });
+}
+
+function renderHistory(){
+  let data = historyData;
+  const q = (historySearch.value || "").toLowerCase();
+
+  if(q){
+    data = data.filter(j =>
+      (j.no_permit || "").toLowerCase().includes(q) ||
+      (j.nama_pekerjaan || "").toLowerCase().includes(q)
+    );
+  }
+
+  historyList.innerHTML = "";
+
+  if(data.length === 0){
+    historyList.innerHTML = "<li><i>Tidak ada data</i></li>";
+    return;
+  }
+
+  data.forEach(j=>{
+    const tgl = j.timestamp
+      ? new Date(j.timestamp).toLocaleDateString("id-ID", { day:"2-digit", month:"short", year:"numeric" })
+      : "-";
+    const status = j.status || "PROSES";
+
+    historyList.innerHTML += `
+      <li>
+        <b>${j.no_permit || "-"}</b> - ${j.nama_pekerjaan || "-"}
+        <span class="status ${status}">● ${status}</span>
+        <small>📅 ${tgl} &middot; ${j.lokasi || "-"}</small>
+        ${j.pic ? `<small>👤 ${j.pic}</small>` : ""}
+      </li>
+    `;
+  });
+}
+
+historyDate.onchange = loadHistory;
+historySearch.oninput = renderHistory;
